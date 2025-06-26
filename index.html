@@ -6,6 +6,37 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <title>English Practice Test – Bài 6</title>
     <style>
+      #popup-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 9999;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      #popup-box {
+        background: white;
+        padding: 20px 30px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        width: 90%;
+        max-width: 400px;
+        font-family: Arial, sans-serif;
+      }
+
+      body.popup-active *:not(#popup-overlay):not(#popup-overlay *) {
+        pointer-events: none;
+        user-select: none;
+      }
+      body.popup-active {
+        overflow: hidden; /* Ngăn cuộn */
+      }
+
       .word-bank,
       .drop-area {
         display: flex;
@@ -118,6 +149,58 @@
     </style>
   </head>
   <body>
+    <!-- Popup Overlay -->
+    <div id="popup-overlay" style="display: none">
+      <div id="popup-box">
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+          "
+        >
+          <strong>🔔 Thông báo</strong>
+          <button
+            onclick="closePopup()"
+            style="
+              border: none;
+              background: transparent;
+              font-size: 20px;
+              cursor: pointer;
+            "
+          >
+            &times;
+          </button>
+        </div>
+        <p>
+          <b style="color: teal"
+            >Trang web hiện vẫn đang trong quá trình hoàn thiện và có thể ko
+            hoạt động trên đth, có thể còn một số lỗi hoặc hiển thị chưa chính
+            xác.</b
+          >
+        </p>
+        <p>
+          <b style="color: teal"
+            >Mong mọi người thông cảm! Nếu cần hỗ trợ, vui lòng liên hệ:</b
+          >
+          <b style="color: #c0392b">https://www.facebook.com/vu.q.huy.795955</b>
+        </p>
+        <button
+          onclick="closeFor2Hours()"
+          style="
+            margin-top: 10px;
+            background: #c0392b;
+            color: white;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 4px;
+          "
+        >
+          Không hiển thị lại trong 2 giờ
+        </button>
+      </div>
+    </div>
+
     <div class="container">
       <h2>English Practice Test – Bài 6</h2>
       <!-- PART I -->
@@ -1300,6 +1383,28 @@
           result.style.color = score === count ? "green" : "red";
         }
       }
+    </script>
+    <script>
+      function closePopup() {
+        document.getElementById("popup-overlay").style.display = "none";
+        document.body.classList.remove("popup-active");
+      }
+
+      function closeFor2Hours() {
+        const now = new Date().getTime();
+        const twoHoursLater = now + 2 * 60 * 60 * 1000;
+        localStorage.setItem("popup-hidden-until", twoHoursLater);
+        closePopup();
+      }
+
+      window.addEventListener("DOMContentLoaded", () => {
+        const hiddenUntil = localStorage.getItem("popup-hidden-until");
+        const now = new Date().getTime();
+        if (!hiddenUntil || now > hiddenUntil) {
+          document.getElementById("popup-overlay").style.display = "flex";
+          document.body.classList.add("popup-active");
+        }
+      });
     </script>
   </body>
 </html>
