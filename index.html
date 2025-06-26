@@ -146,6 +146,68 @@
         margin-top: 15px;
         font-weight: bold;
       }
+      .reading-passage {
+        background-color: #f0f8ff;
+        border: 1px solid #007acc;
+        padding: 16px;
+        margin: 24px 0 12px 0;
+        border-radius: 8px;
+        font-style: normal;
+        font-size: 1.05rem;
+        line-height: 1.6;
+        color: #003366;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+      }
+
+      .reading-passage::before {
+        content: "📘 Reading passage:";
+        display: block;
+        font-weight: bold;
+        margin-bottom: 8px;
+        color: #005599;
+      }
+      .passage {
+        background-color: #fff9e6;
+        border: 1px solid #ffc107;
+        padding: 16px;
+        margin: 24px 0 12px 0;
+        border-radius: 8px;
+        font-style: normal;
+        font-size: 1.05rem;
+        line-height: 1.6;
+        color: #5a4300;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.04);
+      }
+
+      .passage::before {
+        content: "📖 Read this text:";
+        display: block;
+        font-weight: bold;
+        margin-bottom: 8px;
+        color: #cc8400;
+      }
+      .shufflable {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        padding: 10px 12px;
+        background-color: #f8f9fa;
+        border: 1px dashed #aaa;
+        border-radius: 8px;
+        font-style: normal;
+        margin-bottom: 16px;
+      }
+
+      .shufflable span {
+        display: inline-block;
+        background-color: #e7f1ff;
+        color: #003366;
+        padding: 6px 10px;
+        border: 1px solid #99c;
+        border-radius: 6px;
+        font-size: 1rem;
+        font-family: "Segoe UI", sans-serif;
+      }
     </style>
   </head>
   <body>
@@ -698,6 +760,10 @@
     <!-- PART V -->
     <h3>V. Advice using “should”</h3>
     <div class="question-block" data-correct="shouldn't go to">
+      <div class="passage">
+        I am going to Dublin for a holiday with my family. We are thinking about
+        going in February.
+      </div>
       <p>
         21. You .............. Dublin in February because it is cold and wet
         then. June or July is warmer. (go)
@@ -710,9 +776,11 @@
       />
     </div>
     <div class="question-block" data-correct="ellen should learn">
-      <p>
-        22. Ellen .............. some words and phrases before she goes. (learn)
-      </p>
+      <div class="passage">
+        Ellen is going to Thailand for holiday next month, but she can't speak
+        the Thai language.
+      </div>
+      <p>22. .............. some words and phrases before she goes. (learn)</p>
       <input
         name="q22"
         placeholder="Your answer here"
@@ -721,6 +789,7 @@
       />
     </div>
     <div class="question-block" data-correct="shouldn't go by">
+      <div class="passage">Public transport is slow to the city centre.</div>
       <p>23. You ................ bus. A taxi will be faster. (go)</p>
       <input
         name="q23"
@@ -730,6 +799,9 @@
       />
     </div>
     <div class="question-block" data-correct="should go sightseeing">
+      <div class="passage">
+        I'm going to Italy with my family for a holiday this summer.
+      </div>
       <p>
         24. Italy has very old and beautiful buildings. You ...............
         (sightseeing)
@@ -742,6 +814,7 @@
       />
     </div>
     <div class="question-block" data-correct="should go on holiday">
+      <div class="passage">I've worked hard all year and I'm very tired.</div>
       <p>25. You ................. by the sea and have some rest. (holiday)</p>
       <input
         name="q25"
@@ -766,7 +839,9 @@
       >
         <p>14. Put the words in the correct order:</p>
         <p>
-          <em>the bus or / to the / I take / a taxi / city centre? / Should</em>
+          <em class="shufflable"
+            >the bus or / to the / I take / a taxi / city centre? / Should</em
+          >
         </p>
         <div
           class="drop-area"
@@ -820,7 +895,7 @@
       >
         <p>15. Put the words in the correct order:</p>
         <p>
-          <em
+          <em class="shufflable"
             >We / want to / always buy / because we / save money. / tickets /
             return</em
           >
@@ -883,7 +958,7 @@
       >
         <p>16. Put the words in the correct order:</p>
         <p>
-          <em
+          <em class="shufflable"
             >with your family. / travel there / in a homestay / You / should
             stay / when you</em
           >
@@ -940,7 +1015,7 @@
       >
         <p>17. Put the words in the correct order:</p>
         <p>
-          <em
+          <em class="shufflable"
             >We / a boat / the beautiful / take / islands / in Ha Long. / and
             visit / should</em
           >
@@ -1009,7 +1084,7 @@
       >
         <p>18. Put the words in the correct order:</p>
         <p>
-          <em
+          <em class="shufflable"
             >You/ shouldn't/ go to/ because it/ Dublin in winter/ cold./ is
             very</em
           >
@@ -1072,6 +1147,19 @@
     </div>
     <script>
       function submitTextAnswers(start, count, resultId) {
+        // ✅ Kiểm tra xem đã điền đủ chưa
+        let answered = 0;
+        for (let i = 0; i < count; i++) {
+          const qNum = start + i;
+          const input = document.querySelector('input[name="q' + qNum + '"]');
+          if (input && input.value.trim() !== "") answered++;
+        }
+        if (answered < count) {
+          alert("⚠ Vui lòng điền tất cả ô trước khi nộp!");
+          return;
+        }
+
+        // ✅ Chấm điểm và hiển thị đáp án đúng nếu sai
         let score = 0;
         for (let i = 0; i < count; i++) {
           const qNum = start + i;
@@ -1083,6 +1171,7 @@
             .trim();
           const userAnswer = input.value.toLowerCase().trim();
 
+          // Xoá đáp án cũ nếu có
           const oldHint = block.querySelector(".correct-answer-hint");
           if (oldHint) oldHint.remove();
 
@@ -1164,9 +1253,25 @@
 
       function checkSentenceOrdering() {
         const questions = document.querySelectorAll(".sentence-question");
-        let correctCount = 0;
 
-        questions.forEach((q) => {
+        // 🔍 Bước 1: Kiểm tra xem còn câu nào chưa làm không
+        let incomplete = false;
+        for (const q of questions) {
+          const dropArea = q.querySelector(".drop-area");
+          if (!dropArea || dropArea.children.length === 0) {
+            incomplete = true;
+            break;
+          }
+        }
+
+        if (incomplete) {
+          alert("⚠ Vui lòng sắp xếp tất cả câu trước khi nộp!");
+          return; // ⛔ CHẶN LUÔN
+        }
+
+        // ✅ Bước 2: Bắt đầu chấm điểm và hiển thị đáp án
+        let correctCount = 0;
+        for (const q of questions) {
           const correct = normalizeSentence(q.getAttribute("data-answer"));
           const dropArea = q.querySelector(".drop-area");
           const words = Array.from(dropArea.children).map((el) =>
@@ -1174,7 +1279,7 @@
           );
           const userSentence = normalizeSentence(words.join(" "));
 
-          // xoa dap an cu
+          // Xoá đáp án đúng cũ
           const oldHint = q.querySelector(".correct-sentence-hint");
           if (oldHint) oldHint.remove();
 
@@ -1186,7 +1291,6 @@
             dropArea.style.backgroundColor = "#f8d7da";
             dropArea.style.border = "2px solid #dc3545";
 
-            // hien thi
             const hint = document.createElement("p");
             hint.className = "correct-sentence-hint";
             hint.style.color = "#c0392b";
@@ -1196,7 +1300,7 @@
               "Đáp án đúng là: " + q.getAttribute("data-answer");
             dropArea.insertAdjacentElement("afterend", hint);
           }
-        });
+        }
 
         const total = questions.length;
         const result = document.getElementById("result-VI");
@@ -1216,6 +1320,22 @@
       }
 
       function submitAnswers(firstName, count, resultId) {
+        // ✅ Bắt buộc làm đủ mới cho nộp
+        let answered = 0;
+        for (let i = 0; i < count; i++) {
+          const name =
+            firstName.slice(0, 1) + (parseInt(firstName.slice(1)) + i);
+          const selected = document.querySelector(
+            'input[name="' + name + '"]:checked'
+          );
+          if (selected) answered++;
+        }
+        if (answered < count) {
+          alert("⚠ Vui lòng trả lời tất cả các câu hỏi trước khi nộp!");
+          return;
+        }
+
+        // ✅ Chấm điểm và hiển thị đáp án đúng
         let score = 0;
         for (let i = 0; i < count; i++) {
           const name =
@@ -1262,6 +1382,19 @@
       }
 
       function submitTextAnswers(start, count, resultId) {
+        // ✅ Kiểm tra xem đã điền đủ chưa
+        let answered = 0;
+        for (let i = 0; i < count; i++) {
+          const qNum = start + i;
+          const input = document.querySelector('input[name="q' + qNum + '"]');
+          if (input && input.value.trim() !== "") answered++;
+        }
+        if (answered < count) {
+          alert("⚠ Vui lòng điền tất cả ô trước khi nộp!");
+          return;
+        }
+
+        // ✅ Chấm điểm và hiển thị đáp án đúng nếu sai
         let score = 0;
         for (let i = 0; i < count; i++) {
           const qNum = start + i;
@@ -1272,6 +1405,11 @@
             .toLowerCase()
             .trim();
           const userAnswer = input.value.toLowerCase().trim();
+
+          // Xoá đáp án cũ nếu có
+          const oldHint = block.querySelector(".correct-answer-hint");
+          if (oldHint) oldHint.remove();
+
           if (userAnswer === correct) {
             score++;
             block.style.backgroundColor = "#d4edda";
@@ -1279,11 +1417,23 @@
           } else {
             block.style.backgroundColor = "#f8d7da";
             block.style.border = "2px solid #dc3545";
+
+            const hint = document.createElement("p");
+            hint.className = "correct-answer-hint";
+            hint.style.color = "#c0392b";
+            hint.style.fontStyle = "italic";
+            hint.style.marginTop = "8px";
+            hint.textContent =
+              "Đáp án đúng là: " + block.getAttribute("data-correct");
+            block.appendChild(hint);
           }
         }
-        document.getElementById(
-          resultId
-        ).innerText = `You scored ${score}/${count}`;
+
+        const result = document.getElementById(resultId);
+        if (result) {
+          result.innerText = `You scored ${score}/${count}`;
+          result.style.color = score === count ? "green" : "red";
+        }
       }
     </script>
     <script>
@@ -1321,7 +1471,7 @@
             block.style.border = "1px solid #ccc";
             block.style.borderLeft = "5px solid #007bff";
 
-          // xoa dap an
+            // ✅ Thêm đoạn này để xóa phần đáp án đúng nếu có
             const existingHint = block.querySelector(".correct-answer-hint");
             if (existingHint) existingHint.remove();
           }
@@ -1334,6 +1484,22 @@
       }
 
       function submitAnswers(firstName, count, resultId) {
+        // ✅ Bắt buộc làm đủ mới cho nộp
+        let answered = 0;
+        for (let i = 0; i < count; i++) {
+          const name =
+            firstName.slice(0, 1) + (parseInt(firstName.slice(1)) + i);
+          const selected = document.querySelector(
+            'input[name="' + name + '"]:checked'
+          );
+          if (selected) answered++;
+        }
+        if (answered < count) {
+          alert("⚠ Vui lòng trả lời tất cả các câu hỏi trước khi nộp!");
+          return;
+        }
+
+        // ✅ Chấm điểm và hiển thị đáp án đúng
         let score = 0;
         for (let i = 0; i < count; i++) {
           const name =
@@ -1378,9 +1544,21 @@
           result.style.color = score === count ? "green" : "red";
         }
       }
-      
 
       function submitTextAnswers(start, count, resultId) {
+        // ✅ Kiểm tra xem đã điền đủ chưa
+        let answered = 0;
+        for (let i = 0; i < count; i++) {
+          const qNum = start + i;
+          const input = document.querySelector('input[name="q' + qNum + '"]');
+          if (input && input.value.trim() !== "") answered++;
+        }
+        if (answered < count) {
+          alert("⚠ Vui lòng điền tất cả ô trước khi nộp!");
+          return;
+        }
+
+        // ✅ Chấm điểm và hiển thị đáp án đúng nếu sai
         let score = 0;
         for (let i = 0; i < count; i++) {
           const qNum = start + i;
@@ -1392,6 +1570,7 @@
             .trim();
           const userAnswer = input.value.toLowerCase().trim();
 
+          // Xoá đáp án cũ nếu có
           const oldHint = block.querySelector(".correct-answer-hint");
           if (oldHint) oldHint.remove();
 
@@ -1445,68 +1624,100 @@
     </script>
 
     <script>
-      function shuffleQuestions(containerId) {
+      function shuffleQuestions(containerId, itemClass = ".question-block") {
         const container = document.getElementById(containerId);
-        const questions = Array.from(
-          container.querySelectorAll(".question-block")
-        );
-        for (let i = questions.length - 1; i > 0; i--) {
+        if (!container) return;
+        const items = Array.from(container.querySelectorAll(itemClass));
+        for (let i = items.length - 1; i > 0; i--) {
           const j = Math.floor(Math.random() * (i + 1));
-          container.appendChild(questions[j]);
+          container.appendChild(items[j]);
         }
       }
 
       window.addEventListener("DOMContentLoaded", () => {
         shuffleQuestions("part-I");
+        shuffleOptionsInQuestions("part-I");
+
         shuffleQuestions("part-II");
+        shuffleOptionsInQuestions("part-II");
+
+        shuffleQuestions("part-III");
+        shuffleOptionsInQuestions("part-III");
+
+        shuffleQuestions("part-IV");
+        shuffleQuestions("part-V");
+
+        shuffleQuestions("part-VI", ".sentence-question");
+
+        // Shuffle từ trong word-bank
+        document.querySelectorAll(".word-bank").forEach((bank) => {
+          const spans = Array.from(bank.children);
+          for (let i = spans.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            bank.appendChild(spans[j]);
+          }
+        });
+
+        // 🔁 Shuffle cụm từ trong <em class="shufflable">
+        document.querySelectorAll("em.shufflable").forEach((el) => {
+          const parts = el.textContent
+            .split("/")
+            .map((part) => part.trim())
+            .filter(Boolean);
+
+          for (let i = parts.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [parts[i], parts[j]] = [parts[j], parts[i]];
+          }
+
+          el.innerHTML = parts.join(" / ");
+        });
       });
     </script>
     <script>
       function shuffleOptionsInQuestions(containerId) {
         const container = document.getElementById(containerId);
         if (!container) return;
+
         const questions = container.querySelectorAll(".question-block");
 
         questions.forEach((q) => {
           const correctValue = q.getAttribute("data-correct");
+
+          // Lấy tất cả .option (bao gồm <div class="option"> chứa label + input)
           const options = Array.from(q.querySelectorAll(".option"));
-          const optionData = options.map((option) => {
-            const input = option.querySelector("input");
+
+          // Lưu lại DOM node + value để shuffle
+          const optionClones = options.map((opt) => {
+            const input = opt.querySelector("input");
             return {
               value: input.value,
-              html: option.outerHTML,
               isCorrect: input.value === correctValue,
+              node: opt.cloneNode(true), // an toàn layout
             };
           });
 
-          // Shuffle 
-          for (let i = optionData.length - 1; i > 0; i--) {
+          // Fisher-Yates shuffle
+          for (let i = optionClones.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
-            [optionData[i], optionData[j]] = [optionData[j], optionData[i]];
+            [optionClones[i], optionClones[j]] = [
+              optionClones[j],
+              optionClones[i],
+            ];
           }
 
-          // xoa lua chon
+          // Xoá các đáp án gốc
           options.forEach((opt) => opt.remove());
 
-          // shuffle
-          optionData.forEach((opt) => {
-            const tempDiv = document.createElement("div");
-            tempDiv.innerHTML = opt.html.trim();
-            q.appendChild(tempDiv.firstChild);
+          // Gắn lại theo thứ tự đã shuffle
+          optionClones.forEach((opt) => {
+            q.appendChild(opt.node); // giữ layout .option
             if (opt.isCorrect) {
-              q.setAttribute("data-correct", opt.value);
+              q.setAttribute("data-correct", opt.value); // cập nhật lại
             }
           });
         });
       }
-
-      // shuffle
-      window.addEventListener("DOMContentLoaded", () => {
-        shuffleQuestions("part-I");
-        shuffleQuestions("part-II");
-        shuffleOptionsInQuestions("part-I");
-        shuffleOptionsInQuestions("part-II");
-      });
     </script>
   </body>
 </html>
