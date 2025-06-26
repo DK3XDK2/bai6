@@ -1082,11 +1082,34 @@
             .toLowerCase()
             .trim();
           const userAnswer = input.value.toLowerCase().trim();
-          if (userAnswer === correct) score++;
+
+          const oldHint = block.querySelector(".correct-answer-hint");
+          if (oldHint) oldHint.remove();
+
+          if (userAnswer === correct) {
+            score++;
+            block.style.backgroundColor = "#d4edda";
+            block.style.border = "2px solid #28a745";
+          } else {
+            block.style.backgroundColor = "#f8d7da";
+            block.style.border = "2px solid #dc3545";
+
+            const hint = document.createElement("p");
+            hint.className = "correct-answer-hint";
+            hint.style.color = "#c0392b";
+            hint.style.fontStyle = "italic";
+            hint.style.marginTop = "8px";
+            hint.textContent =
+              "Đáp án đúng là: " + block.getAttribute("data-correct");
+            block.appendChild(hint);
+          }
         }
-        document.getElementById(
-          resultId
-        ).innerText = `You scored ${score}/${count}`;
+
+        const result = document.getElementById(resultId);
+        if (result) {
+          result.innerText = `You scored ${score}/${count}`;
+          result.style.color = score === count ? "green" : "red";
+        }
       }
     </script>
     <script>
@@ -1141,80 +1164,6 @@
 
       function checkSentenceOrdering() {
         const questions = document.querySelectorAll(".sentence-question");
-        let allCorrect = true;
-
-        questions.forEach((q) => {
-          const correct = normalizeSentence(q.getAttribute("data-answer"));
-          const dropArea = q.querySelector(".drop-area");
-          const words = Array.from(dropArea.children).map((el) =>
-            el.textContent.trim()
-          );
-          const userSentence = normalizeSentence(words.join(" "));
-          if (userSentence !== correct) {
-            allCorrect = false;
-          }
-        });
-
-        const result = document.getElementById("result-VI");
-        result.textContent = allCorrect
-          ? "Part VI: All correct! ✅"
-          : "Part VI: Some sentences are incorrect. ❌";
-        result.style.color = allCorrect ? "green" : "red";
-      }
-    </script>
-    <script>
-      window.addEventListener("DOMContentLoaded", () => {
-        document.querySelectorAll(".word-bank").forEach((bank) => {
-          const spans = Array.from(bank.children);
-          for (let i = spans.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            bank.appendChild(spans[j]);
-          }
-        });
-      });
-    </script>
-    <script>
-      function normalizeSentence(sentence) {
-        return sentence
-          .toLowerCase()
-          .replace(/[.?!]/g, "")
-          .replace(/\s+/g, " ")
-          .trim();
-      }
-
-      function checkSentenceOrdering() {
-        const questions = document.querySelectorAll(".sentence-question");
-        let correctCount = 0;
-
-        questions.forEach((q) => {
-          const correct = normalizeSentence(q.getAttribute("data-answer"));
-          const dropArea = q.querySelector(".drop-area");
-          const words = Array.from(dropArea.children).map((el) =>
-            el.textContent.trim()
-          );
-          const userSentence = normalizeSentence(words.join(" "));
-          if (userSentence === correct) {
-            correctCount++;
-          }
-        });
-
-        const total = questions.length;
-        const result = document.getElementById("result-VI");
-        result.textContent = `Part VI: You got ${correctCount}/${total} correct.`;
-        result.style.color = correctCount === total ? "green" : "red";
-      }
-    </script>
-    <script>
-      function normalizeSentence(sentence) {
-        return sentence
-          .toLowerCase()
-          .replace(/[.?!]/g, "")
-          .replace(/\s+/g, " ")
-          .trim();
-      }
-
-      function checkSentenceOrdering() {
-        const questions = document.querySelectorAll(".sentence-question");
         let correctCount = 0;
 
         questions.forEach((q) => {
@@ -1225,13 +1174,27 @@
           );
           const userSentence = normalizeSentence(words.join(" "));
 
+          // xoa dap an cu
+          const oldHint = q.querySelector(".correct-sentence-hint");
+          if (oldHint) oldHint.remove();
+
           if (userSentence === correct) {
             correctCount++;
-            dropArea.style.backgroundColor = "#d4edda"; // light green
+            dropArea.style.backgroundColor = "#d4edda";
             dropArea.style.border = "2px solid #28a745";
           } else {
-            dropArea.style.backgroundColor = "#f8d7da"; // light red
+            dropArea.style.backgroundColor = "#f8d7da";
             dropArea.style.border = "2px solid #dc3545";
+
+            // hien thi
+            const hint = document.createElement("p");
+            hint.className = "correct-sentence-hint";
+            hint.style.color = "#c0392b";
+            hint.style.fontStyle = "italic";
+            hint.style.marginTop = "8px";
+            hint.textContent =
+              "Đáp án đúng là: " + q.getAttribute("data-answer");
+            dropArea.insertAdjacentElement("afterend", hint);
           }
         });
 
@@ -1260,22 +1223,42 @@
           const input = document.querySelector('input[name="' + name + '"]');
           if (!input) continue;
           const block = input.closest(".question-block");
-          const correct = block.getAttribute("data-correct");
+          const correctValue = block.getAttribute("data-correct");
           const selected = block.querySelector(
             'input[name="' + name + '"]:checked'
           );
-          if (selected && selected.value === correct) {
+
+          const oldHint = block.querySelector(".correct-answer-hint");
+          if (oldHint) oldHint.remove();
+
+          if (selected && selected.value === correctValue) {
             score++;
             block.style.backgroundColor = "#d4edda";
             block.style.border = "2px solid #28a745";
           } else {
             block.style.backgroundColor = "#f8d7da";
             block.style.border = "2px solid #dc3545";
+
+            const correctInput = block.querySelector(
+              'input[value="' + correctValue + '"]'
+            );
+            const correctText = correctInput.closest("label").innerText.trim();
+
+            const hint = document.createElement("p");
+            hint.className = "correct-answer-hint";
+            hint.style.color = "#c0392b";
+            hint.style.fontStyle = "italic";
+            hint.style.marginTop = "8px";
+            hint.textContent = "Đáp án đúng là: " + correctText;
+            block.appendChild(hint);
           }
         }
-        document.getElementById(
-          resultId
-        ).innerText = `You scored ${score}/${count}`;
+
+        const result = document.getElementById(resultId);
+        if (result) {
+          result.innerText = `You scored ${score}/${count}`;
+          result.style.color = score === count ? "green" : "red";
+        }
       }
 
       function submitTextAnswers(start, count, resultId) {
@@ -1310,9 +1293,14 @@
           const dropArea = q.querySelector(".drop-area");
           const spans = Array.from(dropArea.children);
           spans.forEach((span) => wordBank.appendChild(span));
+
           dropArea.style.backgroundColor = "#f9f9f9";
           dropArea.style.border = "1px dashed #aaa";
+
+          const oldHint = q.querySelector(".correct-sentence-hint");
+          if (oldHint) oldHint.remove();
         });
+
         const result = document.getElementById("result-VI");
         if (result) result.textContent = "";
       }
@@ -1332,6 +1320,10 @@
             block.style.backgroundColor = "#fafafa";
             block.style.border = "1px solid #ccc";
             block.style.borderLeft = "5px solid #007bff";
+
+          // xoa dap an
+            const existingHint = block.querySelector(".correct-answer-hint");
+            if (existingHint) existingHint.remove();
           }
         }
         const result = document.getElementById(resultId);
@@ -1349,25 +1341,44 @@
           const input = document.querySelector('input[name="' + name + '"]');
           if (!input) continue;
           const block = input.closest(".question-block");
-          const correct = block.getAttribute("data-correct");
+          const correctValue = block.getAttribute("data-correct");
           const selected = block.querySelector(
             'input[name="' + name + '"]:checked'
           );
-          if (selected && selected.value === correct) {
+
+          const oldHint = block.querySelector(".correct-answer-hint");
+          if (oldHint) oldHint.remove();
+
+          if (selected && selected.value === correctValue) {
             score++;
             block.style.backgroundColor = "#d4edda";
             block.style.border = "2px solid #28a745";
           } else {
             block.style.backgroundColor = "#f8d7da";
             block.style.border = "2px solid #dc3545";
+
+            const correctInput = block.querySelector(
+              'input[value="' + correctValue + '"]'
+            );
+            const correctText = correctInput.closest("label").innerText.trim();
+
+            const hint = document.createElement("p");
+            hint.className = "correct-answer-hint";
+            hint.style.color = "#c0392b";
+            hint.style.fontStyle = "italic";
+            hint.style.marginTop = "8px";
+            hint.textContent = "Đáp án đúng là: " + correctText;
+            block.appendChild(hint);
           }
         }
+
         const result = document.getElementById(resultId);
         if (result) {
           result.innerText = `You scored ${score}/${count}`;
           result.style.color = score === count ? "green" : "red";
         }
       }
+      
 
       function submitTextAnswers(start, count, resultId) {
         let score = 0;
@@ -1380,6 +1391,10 @@
             .toLowerCase()
             .trim();
           const userAnswer = input.value.toLowerCase().trim();
+
+          const oldHint = block.querySelector(".correct-answer-hint");
+          if (oldHint) oldHint.remove();
+
           if (userAnswer === correct) {
             score++;
             block.style.backgroundColor = "#d4edda";
@@ -1387,8 +1402,18 @@
           } else {
             block.style.backgroundColor = "#f8d7da";
             block.style.border = "2px solid #dc3545";
+
+            const hint = document.createElement("p");
+            hint.className = "correct-answer-hint";
+            hint.style.color = "#c0392b";
+            hint.style.fontStyle = "italic";
+            hint.style.marginTop = "8px";
+            hint.textContent =
+              "Đáp án đúng là: " + block.getAttribute("data-correct");
+            block.appendChild(hint);
           }
         }
+
         const result = document.getElementById(resultId);
         if (result) {
           result.innerText = `You scored ${score}/${count}`;
@@ -1454,7 +1479,7 @@
             };
           });
 
-          // dao thu tu
+          // Shuffle 
           for (let i = optionData.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [optionData[i], optionData[j]] = [optionData[j], optionData[i]];
