@@ -236,7 +236,7 @@
         </div>
         <p>
           <b style="color: teal"
-            >Trang web hiện vẫn đang trong quá trình hoàn thiện, có thể còn một
+            >Trang web hiện vẫn đang trong quá trình hoàn thiện và ko dùng trên đth, có thể còn một
             số lỗi hoặc hiển thị chưa chính xác.</b
           >
         </p>
@@ -1147,7 +1147,7 @@
     </div>
     <script>
       function submitTextAnswers(start, count, resultId) {
-        // ✅ Kiểm tra xem đã điền đủ chưa
+
         let answered = 0;
         for (let i = 0; i < count; i++) {
           const qNum = start + i;
@@ -1159,7 +1159,7 @@
           return;
         }
 
-        // ✅ Chấm điểm và hiển thị đáp án đúng nếu sai
+     
         let score = 0;
         for (let i = 0; i < count; i++) {
           const qNum = start + i;
@@ -1171,7 +1171,7 @@
             .trim();
           const userAnswer = input.value.toLowerCase().trim();
 
-          // Xoá đáp án cũ nếu có
+
           const oldHint = block.querySelector(".correct-answer-hint");
           if (oldHint) oldHint.remove();
 
@@ -1254,7 +1254,7 @@
       function checkSentenceOrdering() {
         const questions = document.querySelectorAll(".sentence-question");
 
-        // 🔍 Bước 1: Kiểm tra xem còn câu nào chưa làm không
+
         let incomplete = false;
         for (const q of questions) {
           const dropArea = q.querySelector(".drop-area");
@@ -1266,10 +1266,10 @@
 
         if (incomplete) {
           alert("⚠ Vui lòng sắp xếp tất cả câu trước khi nộp!");
-          return; // ⛔ CHẶN LUÔN
+          return; 
         }
 
-        // ✅ Bước 2: Bắt đầu chấm điểm và hiển thị đáp án
+   
         let correctCount = 0;
         for (const q of questions) {
           const correct = normalizeSentence(q.getAttribute("data-answer"));
@@ -1320,7 +1320,7 @@
       }
 
       function submitAnswers(firstName, count, resultId) {
-        // ✅ Bắt buộc làm đủ mới cho nộp
+     
         let answered = 0;
         for (let i = 0; i < count; i++) {
           const name =
@@ -1335,7 +1335,7 @@
           return;
         }
 
-        // ✅ Chấm điểm và hiển thị đáp án đúng
+       
         let score = 0;
         for (let i = 0; i < count; i++) {
           const name =
@@ -1382,7 +1382,7 @@
       }
 
       function submitTextAnswers(start, count, resultId) {
-        // ✅ Kiểm tra xem đã điền đủ chưa
+
         let answered = 0;
         for (let i = 0; i < count; i++) {
           const qNum = start + i;
@@ -1394,7 +1394,6 @@
           return;
         }
 
-        // ✅ Chấm điểm và hiển thị đáp án đúng nếu sai
         let score = 0;
         for (let i = 0; i < count; i++) {
           const qNum = start + i;
@@ -1471,7 +1470,7 @@
             block.style.border = "1px solid #ccc";
             block.style.borderLeft = "5px solid #007bff";
 
-            // ✅ Thêm đoạn này để xóa phần đáp án đúng nếu có
+
             const existingHint = block.querySelector(".correct-answer-hint");
             if (existingHint) existingHint.remove();
           }
@@ -1484,7 +1483,7 @@
       }
 
       function submitAnswers(firstName, count, resultId) {
-        // ✅ Bắt buộc làm đủ mới cho nộp
+
         let answered = 0;
         for (let i = 0; i < count; i++) {
           const name =
@@ -1499,7 +1498,7 @@
           return;
         }
 
-        // ✅ Chấm điểm và hiển thị đáp án đúng
+
         let score = 0;
         for (let i = 0; i < count; i++) {
           const name =
@@ -1546,7 +1545,7 @@
       }
 
       function submitTextAnswers(start, count, resultId) {
-        // ✅ Kiểm tra xem đã điền đủ chưa
+
         let answered = 0;
         for (let i = 0; i < count; i++) {
           const qNum = start + i;
@@ -1558,7 +1557,7 @@
           return;
         }
 
-        // ✅ Chấm điểm và hiển thị đáp án đúng nếu sai
+
         let score = 0;
         for (let i = 0; i < count; i++) {
           const qNum = start + i;
@@ -1570,7 +1569,7 @@
             .trim();
           const userAnswer = input.value.toLowerCase().trim();
 
-          // Xoá đáp án cũ nếu có
+
           const oldHint = block.querySelector(".correct-answer-hint");
           if (oldHint) oldHint.remove();
 
@@ -1649,7 +1648,7 @@
 
         shuffleQuestions("part-VI", ".sentence-question");
 
-        // Shuffle từ trong word-bank
+
         document.querySelectorAll(".word-bank").forEach((bank) => {
           const spans = Array.from(bank.children);
           for (let i = spans.length - 1; i > 0; i--) {
@@ -1658,7 +1657,7 @@
           }
         });
 
-        // 🔁 Shuffle cụm từ trong <em class="shufflable">
+
         document.querySelectorAll("em.shufflable").forEach((el) => {
           const parts = el.textContent
             .split("/")
@@ -1684,10 +1683,10 @@
         questions.forEach((q) => {
           const correctValue = q.getAttribute("data-correct");
 
-          // Lấy tất cả .option (bao gồm <div class="option"> chứa label + input)
+         
           const options = Array.from(q.querySelectorAll(".option"));
 
-          // Lưu lại DOM node + value để shuffle
+        
           const optionClones = options.map((opt) => {
             const input = opt.querySelector("input");
             return {
@@ -1697,7 +1696,7 @@
             };
           });
 
-          // Fisher-Yates shuffle
+       
           for (let i = optionClones.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [optionClones[i], optionClones[j]] = [
@@ -1706,10 +1705,10 @@
             ];
           }
 
-          // Xoá các đáp án gốc
+      
           options.forEach((opt) => opt.remove());
 
-          // Gắn lại theo thứ tự đã shuffle
+       
           optionClones.forEach((opt) => {
             q.appendChild(opt.node); // giữ layout .option
             if (opt.isCorrect) {
