@@ -1454,16 +1454,16 @@
             };
           });
 
-          // Shuffle the options
+          // dao thu tu
           for (let i = optionData.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [optionData[i], optionData[j]] = [optionData[j], optionData[i]];
           }
 
-          // Clear old options
+          // xoa lua chon
           options.forEach((opt) => opt.remove());
 
-          // Append new shuffled options
+          // shuffle
           optionData.forEach((opt) => {
             const tempDiv = document.createElement("div");
             tempDiv.innerHTML = opt.html.trim();
@@ -1475,7 +1475,7 @@
         });
       }
 
-      // Kết hợp với shuffle câu hỏi đã có sẵn
+      // shuffle
       window.addEventListener("DOMContentLoaded", () => {
         shuffleQuestions("part-I");
         shuffleQuestions("part-II");
